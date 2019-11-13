@@ -1,0 +1,25 @@
+<form method="POST" action="/search">
+    <div>
+        <input type="text" name="bookName" placeholder="Book Name">
+    </div>
+    <div>
+        <input type="text" name="author" placeholder="Author">
+    </div>
+    <button type="submit">
+        Search
+    </button>
+</form>
+    <% if(books != null) { %>
+        <% books.forEach(function(book) { %>
+            <% if(book.status == "Available") { %>
+                <div>
+                    <%= book.bookName %>
+                    <%= book.owner %>
+                    <%= book.author %>
+                    <%= book.publisher %>
+                    <%= book.edition %>
+                    <a href="/confirmDetails/<%= book.id %>">Borrow</a>
+                </div>
+            <% } %>
+        <% }); %>
+    <% } %>

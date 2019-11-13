@@ -1,0 +1,24 @@
+<% include partials/header %>
+
+
+<h1>
+    <%= currentUser.name %>, Welcome to your home page!
+</h1>
+<div>
+    <% books.forEach(function(book){ %>
+        <div>
+            <%= book.bookName %>
+            <%= book.lenderName %>
+            <%= book.borrowerName %>
+        </div>
+    <% }) %>       
+</div>
+<div>
+    <a href="/addbook">Add a Book!</a>
+</div>
+<div>
+    <a href="/search">Search a Book!</a>
+</div>
+<div>
+    <a href="/logout">Logout</a>
+</div>
