@@ -47,17 +47,17 @@ app.use(function(request, response, next){
 	next();
 });
 
-
+//connecting to database
 mongoose.connect("mongodb://localhost:27017/BookSharingPortal",{useNewUrlParser : true, autoIndex : false});
 
 
-
+//routes
 app.get('/', function(req,res){
     res.render('landing');
 });
 
 app.get('/home', isLoggedIn, function(req,res){
-    Transactions.find({$or:[{ lenderName: req.user.name},{borrowerName: req.user.name}]}, function (err, books) {
+    Transactions.find({$or:[{ lenderName: req.user.name},{borrowerName: req.user.name}],isActive : 1}, function (err, books) {
         // lentBooks = books;
         res.render('home',{books : books});       
         // console.log(books);
@@ -92,6 +92,32 @@ app.post("/addbook", function(request, response){
     });
     count++;
     response.redirect("/home");
+});
+
+app.get("/returnBook",isLoggedIn,function(req,res) {
+    res.render('returnBook');
+});
+
+app.post("/returnBook",isLoggedIn,function(req,res) {
+    Transactions.find({bookName : req.body.bookName, borrowerName : req.user.name},function(err,book) {
+        if(err) {
+            console.log(err);
+        } else {
+            var bookID= book[0].id;
+            book[0].isActive = 0;
+            book[0].save();
+            Books.find({id : bookID},function(err,returnedBook) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    returnedBook[0].status = "Available";
+                    returnedBook[0].notified = 1;
+                    returnedBook[0].save();
+                }
+            });
+        }
+    });
+    res.redirect("/home");
 });
 
 app.get("/search",isLoggedIn,function(req,res) {
@@ -158,6 +184,8 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
     });
     res.redirect("/home");
 });
+
+
 
 //Authentication Routes
 app.get("/register", function(request, response){
