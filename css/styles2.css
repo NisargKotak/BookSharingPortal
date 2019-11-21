@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {box-sizing: border-box}
+
+.parent {
+    display: flex;
+    background-color: white;
+    justify-content: center;
+    align-items: baseline;
+}
+.kid {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 25px;
+    align-items: baseline;
+}
+
+h1{
+    align-self: center;
+}
+
+input[type=text], input[type=password] {
+    margin-left: 25px;
+    margin-right: 25px;
+    padding: 15px;
+    display: inline-block;
+    border: 1px solid #ddd;
+    background: white;
+    color: black;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button:hover {
+    opacity:1;
+}
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    text-align: left;
+    padding: 10px;
+}
+
+tr{
+    background-color: #dddddd;
+}
+
+a:link {
+    text-decoration: none;
+}

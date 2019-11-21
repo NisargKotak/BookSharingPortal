@@ -1,23 +1,12 @@
 <% include partials/header %>
-
+<link rel="stylesheet" href="/css/styles2.css">
 
 <h1>
     <%= currentUser.name %>, Welcome to your home page!
 </h1>
-<div>
-    <% books.forEach(function(book){ %>
-        <div>
-            <%= book.bookName %>
-            <%= book.lenderName %>
-            <%= book.borrowerName %>
-        </div>
-    <% }) %>       
-</div>
+
 <div>
     <a href="/addbook">Add a Book!</a>
-</div>
-<div>
-    <a href="/returnBook">Return a book</a>
 </div>
 <div>
     <a href="/search">Search a Book!</a>
@@ -25,3 +14,36 @@
 <div>
     <a href="/logout">Logout</a>
 </div>
+
+
+<table rules="rows">
+    <tr>
+        <th>Book Name</th>
+        <th>Book Owner</th>
+        <th>Book Borrower</th>
+        <th>Book Author</th>
+        <th>Book Publisher</th>
+        <th>Book Edition</th>
+        <th>Return</th>
+    </tr>
+    <% if(books != null) { %>
+    <% books.forEach(function(book) { %>
+                <tr>
+                    <td><%= book.info.bookName %></td>
+                    <td><%= book.info.owner %></td>
+                    <td><%= book.borrowerName %></td>
+                    <td><%= book.info.author %></td>
+                    <td><%= book.info.publisher %></td>
+                    <td><%= book.info.edition %></td>
+                    <% if(book.borrowerName === currentUser.name) {%>
+                        <td>
+                            <form action="/returnBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" >Click Here</a>
+                            </form>
+                        </td>
+                    <%}%>
+                </tr>
+        <% }); %>
+    <% } %>
+</table>

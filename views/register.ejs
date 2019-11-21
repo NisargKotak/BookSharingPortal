@@ -1,10 +1,29 @@
 <% include partials/header %>
+<link rel="stylesheet" href="/css/styles.css">
 
 <form method="POST" action="/register">
-    <input type="text" name="name" placeholder="name" required>
-    <input type="text" name="id" placeholder="id">
-    <input type="text" name="username" placeholder="username" required>
-    <input type="password" name="password" placeholder="password" required>
-    <button type="submit">SignUp</button>
-
+    <div class="parent">
+        <h1>Sign Up</h1>
+        <hr>
+        <div class="kid">
+            <label><b>Full Name</b></label>
+            <input type="text" name="name" required>
+        </div>
+        <div class="kid">
+            <label><b>ID Number</b></label>
+            <input type="text" name="id">
+        </div>
+        <div class="kid">
+            <label><b>Username</b></label>
+            <input type="text" name="username" required>
+        </div>
+        <div class="kid">
+            <label><b>Password</b></label>
+            <input type="password" name="password" required>
+        </div>
+        <div class="kid">
+            <button onclick=location.href="/">Log In</button>
+            <button type="submit">Create Account</button>
+        </div>
+    </div>
 </form>

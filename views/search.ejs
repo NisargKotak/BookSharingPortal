@@ -1,25 +1,46 @@
+<link rel="stylesheet" href="/css/styles2.css">
 <form method="POST" action="/search">
-    <div>
-        <input type="text" name="bookName" placeholder="Book Name">
+    <div class="parent">
+        <div class="kid">
+            <label><b>Book Name</b></label>
+            <input type="text" name="bookName">
+        </div>
+        <div class="kid">
+            <label><b>Author</b></label>
+            <input type="text" name="author">
+        </div>
+        <button type="submit">
+            Search
+        </button>
     </div>
-    <div>
-        <input type="text" name="author" placeholder="Author">
-    </div>
-    <button type="submit">
-        Search
-    </button>
 </form>
+
+<table rules="rows">
+    <tr>
+        <th>Book Name</th>
+        <th>Book Owner</th>
+        <th>Book Author</th>
+        <th>Book Publisher</th>
+        <th>Book Edition</th>
+        <th>Borrow</th>
+    </tr>
     <% if(books != null) { %>
         <% books.forEach(function(book) { %>
             <% if(book.status == "Available") { %>
-                <div>
-                    <%= book.bookName %>
-                    <%= book.owner %>
-                    <%= book.author %>
-                    <%= book.publisher %>
-                    <%= book.edition %>
-                    <a href="/confirmDetails/<%= book.id %>">Borrow</a>
-                </div>
-            <% } %>
+                <tr>
+                    <td><%= book.bookName %></td>
+                    <td><%= book.owner %></td>
+                    <td><%= book.author %></td>
+                    <td><%= book.publisher %></td>
+                    <td><%= book.edition %></td>
+                    <td>
+                        <form action="/confirmDetails/<%= book.id %>" method="POST">
+                            <a href="#" onclick="if (! confirm('Do you want to borrow?')) { return false; } else this.parentNode.submit()" >Click Here</a>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
         <% }); %>
     <% } %>
+</table>
+
