@@ -2,82 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2f853546-a64e-4b08-99c5-839c42115814" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/css/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/styles2.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/css/styles3.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/collection-10--4271078348508685088.wt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/collection-12--4271078348508685088.wt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/diagnostic.data/metrics.2019-11-21T14-17-58Z-00000" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/diagnostic.data/metrics.2019-11-23T12-09-58Z-00000" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/data/diagnostic.data/metrics.interim" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/index-11--4271078348508685088.wt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/index-13--4271078348508685088.wt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/journal/WiredTigerLog.0000000002" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/book.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/books.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/bin/nodemon.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/bin/postinstall.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/commitlint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/cli/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/cli/parse.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/config/command.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/config/defaults.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/config/exec.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/config/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/config/load.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/help/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/monitor/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/monitor/match.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/monitor/run.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/monitor/signals.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/monitor/watch.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/nodemon.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/rules/add.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/rules/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/rules/parse.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/spawn.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/bus.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/clone.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/colour.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/log.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/utils/merge.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/lib/version.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/nodemon/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/data/journal/WiredTigerLog.0000000003" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/Logout.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/WiredTiger" beforeDir="false" afterPath="$PROJECT_DIR$/data/WiredTiger" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/WiredTiger.lock" beforeDir="false" afterPath="$PROJECT_DIR$/data/WiredTiger.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/styles2.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/styles2.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/WiredTiger.turtle" beforeDir="false" afterPath="$PROJECT_DIR$/data/WiredTiger.turtle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/WiredTiger.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/WiredTiger.wt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/_mdb_catalog.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/_mdb_catalog.wt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-0-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-16-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-2-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-20-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-4-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/collection-6-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/diagnostic.data/metrics.2019-11-09T09-47-05Z-00000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/diagnostic.data/metrics.2019-11-11T18-55-25Z-00000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/diagnostic.data/metrics.2019-11-14T10-02-20Z-00000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-1-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-17-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-21-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-3-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-5-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-6-7632628146019017527.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/index-7-7051932386729182065.wt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/journal/WiredTigerLog.0000000003" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/collection-10--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/collection-10--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/collection-12--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/collection-12--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/collection-2--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/collection-2--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/collection-4--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/collection-4--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/index-11--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/index-11--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/index-13--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/index-13--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/index-3--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/index-3--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/index-5--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/index-5--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/index-6--4271078348508685088.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/index-6--4271078348508685088.wt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/journal/WiredTigerLog.0000000002" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/data/mongod.lock" beforeDir="false" afterPath="$PROJECT_DIR$/data/mongod.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/sizeStorer.wt" beforeDir="false" afterPath="$PROJECT_DIR$/data/sizeStorer.wt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/views/addbook.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/addbook.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/confirmDetails.ejs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/home.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/home.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/landing.ejs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/register.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/register.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/returnBook.ejs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/views/search.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/search.ejs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -108,7 +55,7 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path" value="D:/Program Files/nodejs/node" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -146,6 +93,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574317850951</updated>
       <workItem from="1574317854161" duration="34847000" />
+      <workItem from="1574511079083" duration="14536000" />
     </task>
     <servers />
   </component>
@@ -157,7 +105,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

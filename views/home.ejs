@@ -1,20 +1,16 @@
 <% include partials/header %>
 <link rel="stylesheet" href="/css/styles2.css">
 
-<h1>
-    <%= currentUser.name %>, Welcome to your home page!
-</h1>
-
-<div>
-    <a href="/addbook">Add a Book!</a>
+<div class="top">
+    <h1>
+        Welcome <%= currentUser.name %>
+    </h1>
+    <div>
+        <button onclick=location.href="/addbook">Add Book</button>
+        <button onclick=location.href="/search">Search Book</button>
+        <button onclick=location.href="/logout">Logout</button>
+    </div>
 </div>
-<div>
-    <a href="/search">Search a Book!</a>
-</div>
-<div>
-    <a href="/logout">Logout</a>
-</div>
-
 
 <table rules="rows">
     <tr>
@@ -24,7 +20,7 @@
         <th>Book Author</th>
         <th>Book Publisher</th>
         <th>Book Edition</th>
-        <th>Return</th>
+        <th>Action</th>
     </tr>
     <% if(books != null) { %>
     <% books.forEach(function(book) { %>
@@ -35,11 +31,31 @@
                     <td><%= book.info.author %></td>
                     <td><%= book.info.publisher %></td>
                     <td><%= book.info.edition %></td>
-                    <% if(book.borrowerName === currentUser.name) {%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Borrowed') {%>
                         <td>
                             <form action="/returnBook" method="POST">
                                 <input type="hidden" name="id" value=<%= book.id %>>
-                                <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" >Click Here</a>
+                                <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" >Click Here to Return</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>Requested</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Borrowed') {%>
+                        <td>Not Returned Yet</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Available">
+                                <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny</a>
+                            </form>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Borrowed">
+                                <a href="#" onclick="if (! confirm('Do you want to lend?')) { return false; } else this.parentNode.submit()" >Click Here to Lend</a>
                             </form>
                         </td>
                     <%}%>

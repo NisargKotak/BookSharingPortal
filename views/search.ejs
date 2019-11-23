@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/styles2.css">
+<button onclick=location.href="/home" class="back">Go Back</button>
 <form method="POST" action="/search">
     <div class="parent">
         <div class="kid">
@@ -26,7 +27,7 @@
     </tr>
     <% if(books != null) { %>
         <% books.forEach(function(book) { %>
-            <% if(book.status == "Available") { %>
+            <% if(book.status === "Available" && book.owner !== currentUser.name) { %>
                 <tr>
                     <td><%= book.bookName %></td>
                     <td><%= book.owner %></td>

@@ -12,7 +12,7 @@ var Books = require('./models/Book');
 var count = 1;
 Books.count({},function(err,cnt) {
     if(err) {
-        console.log("LITE");
+        console.log(err);
     } else {
         count = cnt + 1;
     }
@@ -92,9 +92,6 @@ app.post("/addbook", function(request, response){
         isActive : true
     }, function(err, newBook){
         if(err){
-            // console.log("HELOOOOO");
-            // console.log(count);
-            // console.log(request.user.name);
             console.log(err);
         } else {
             //request.user.save();
@@ -121,7 +118,27 @@ app.post("/returnBook",isLoggedIn,function(req,res) {
                     returnedBook[0].notified = true;
                     returnedBook[0].save();
                 }
+                res.redirect("/home");
             });
+        }
+    }).sort({dateOFLending:-1});
+});
+
+app.post("/lendBook",isLoggedIn,function(req,res) {
+    var bookId = Number(req.body.id);
+    Books.find({id : bookId},function(err,returnedBook) {
+        if(err) {
+            console.log(err);
+        } else {
+            returnedBook[0].status = req.body.status;
+            returnedBook[0].save();
+            if(req.body.status === "Available")
+            {
+                Transactions.find({id:bookId},function (err, books) {
+                    books[0].isActive = false;
+                    books[0].save();
+                }).sort({dateOFLending:-1})
+            }
         }
     });
     res.redirect("/home");
@@ -172,7 +189,7 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
                 id : book[0].id
             });
             // console.log(book[0].status);
-            book[0].status = "Borrowed";
+            book[0].status = "Requested";
             book[0].notified = true;
             book[0].save();
         }
