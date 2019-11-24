@@ -1,14 +1,15 @@
-<% include partials/header %>
 <link rel="stylesheet" href="/css/styles2.css">
+<% include partials/header %>
 
 <div class="top">
     <h1>
         Welcome <%= currentUser.name %>
     </h1>
-    <div>
-        <button onclick=location.href="/addbook">Add Book</button>
-        <button onclick=location.href="/search">Search Book</button>
-        <button onclick=location.href="/logout">Logout</button>
+    <div style="display: flex;align-items: baseline">
+        <p style="float: left;margin-right: 10px">Deposit Left: <strong><%=currentUser.deposit%></strong></p>
+        <button style="margin-right: 10px" onclick=location.href="/addbook">Add Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/search">Search Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/logout">Logout</button>
     </div>
 </div>
 

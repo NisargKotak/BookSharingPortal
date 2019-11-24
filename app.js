@@ -9,7 +9,12 @@ var flash = require("connect-flash");
 var User = require('./models/User');
 var Transactions = require('./models/Transactions');
 var Books = require('./models/Book');
+var differenceInDays = require('date-fns/differenceInDays')
 var count = 1;
+var INITIAL_BALANCE = 100;
+var PENALTY = 5;
+var NO_OF_DAYS = 7;
+var MIN_BALANCE = 20;
 Books.count({},function(err,cnt) {
     if(err) {
         console.log(err);
@@ -70,7 +75,52 @@ app.get('/home', isLoggedIn, function(req,res){
             }},
         { $unwind: "$info" }
         ],function (err, books) {
-            res.render('home',{books:books})
+            var total=0;
+            if(books.length>0)
+            {
+                books.filter(book => book.requestStatus==='Approved').forEach(book => {
+                    let cur = differenceInDays(Date.now(),book.dateOfLending);
+                    if(cur>NO_OF_DAYS && book.borrowerName===req.user.name)
+                        total+=PENALTY*(cur-NO_OF_DAYS);
+                });
+                User.find({name:req.user.name},function (err ,users) {
+                    if(differenceInDays(Date.now(),users[0].lastUpdatedOn)>0)
+                    {
+                        users[0].deposit -= total;
+                        users[0].lastUpdatedOn = Date.now();
+                        users[0].save();
+                    }
+                    if(users[0].deposit<0)
+                    {
+                        req.flash("error", "No Deposit");
+                        res.locals.error = req.flash("error");
+                        res.render('login');
+                    }
+                    else if(users[0].deposit<=MIN_BALANCE)
+                    {
+                        if(total === 0)
+                            req.flash("error", "Low Deposit");
+                        else if(total>0)
+                            req.flash("error", "Low Deposit and Return Books to avoid penalty");
+                        res.locals.error = req.flash("error");
+                        res.render('home',{books:books});
+                    }
+                    else if(total>0)
+                    {
+                        req.flash("error", "Return Books to avoid penalty");
+                        res.locals.error = req.flash("error");
+                        res.render('home',{books:books});
+                    }
+                    else
+                    {
+                        res.render('home',{books:books});
+                    }
+                });
+            }
+            else
+            {
+                res.render('home',{books:books});
+            }
         }
     )
 });
@@ -93,9 +143,10 @@ app.post("/addbook", function(request, response){
         if(err){
             console.log(err);
         } else {
-            //request.user.save();
             request.flash("success", newBook.bookName + " has been added to your list");
-        }			
+            //request.user.save();
+            response.locals.error = request.flash("error");
+        }
     });
     count++;
     response.redirect("/home");
@@ -109,6 +160,7 @@ app.post("/returnBook",isLoggedIn,function(req,res) {
         } else {
             book[0].isActive = false;
             book[0].requestStatus = "Returned";
+            book[0].dateOfReturning = Date.now();
             book[0].save();
             Books.find({id : bookId},function(err,returnedBook) {
                 if(err) {
@@ -141,6 +193,8 @@ app.post("/lendBook",isLoggedIn,function(req,res) {
                 else
                 {
                     books[0].requestStatus = "Approved";
+                    books[0].dateOfLending = Date.now();
+                    books[0].dateOfReturning = Date.now() + 7*24*60*60;
                 }
                 books[0].save();
             }).sort({dateOfLending:-1})
@@ -157,6 +211,7 @@ app.get("/search",isLoggedIn,function(req,res) {
 app.post("/search", function(req,res) {
     if(req.body.bookName === "" && req.body.author === "") {
         req.flash("error", "Please enter atleast one field");
+        res.locals.error = req.flash("error");
         res.render("search",{books:null});
     } else {
         // console.log("here");
@@ -192,7 +247,6 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
                 borrowerName : req.user.name,
                 isActive : true,
                 dateOfLending: Date.now(),
-                dateOfReturning : (Date.now() + 7*24*60*60),
                 id : book[0].id
             });
             // console.log(book[0].status);
@@ -211,16 +265,18 @@ app.get("/register", function(request, response){
 });
 
 app.post("/register", function(request, response){
-	var newUser = new User({name: request.body.name, username: request.body.username, id: request.body.id});
+	var newUser = new User({name: request.body.name, username: request.body.username, id: request.body.id, deposit: INITIAL_BALANCE, lastUpdatedOn: Date.now()});
 	User.register(newUser, request.body.password, function(err, user){
 		if(err){
             console.log(err);
             request.flash("error", "That Username isn't available!");
-			response.redirect("/register");
+            response.locals.error = request.flash("error");
+            response.redirect("/register");
 		} else {
 			passport.authenticate("local")(request, response, function(){
 				request.flash("success", request.body.name + ", you've been registered successfully!");
-				response.redirect("/home");
+                response.locals.error = request.flash("success");
+                response.redirect("/home");
 			});
 		}
 	});
@@ -240,7 +296,8 @@ app.post("/login", passport.authenticate("local",
 app.get("/logout", function(request, response){
 	request.logout();
 	request.flash("success", "Logged you out!");
-	response.redirect("/");
+    response.locals.error = request.flash("success");
+    response.redirect("/");
 });
 
 //temporary middleware
@@ -249,7 +306,8 @@ function isLoggedIn(request, response, next){
 		next();
 	} else {
 		request.flash("error", "Please Login First!");
-		response.redirect("/login");
+        response.locals.error = request.flash("error");
+        response.redirect("/login");
 	}
 }
 

@@ -1,5 +1,5 @@
-<% include partials/header %>
 <link rel="stylesheet" href="/css/styles.css">
+<% include partials/header %>
 
 <form action="/login" method="POST">
     <div class="parent">
@@ -14,7 +14,7 @@
             <input type="password" name="password" required>
         </div>
         <div class="kid">
-            <button onclick=location.href="/register">Sign Up</button>
+            <button type="button" onclick=location.href="/register">Sign Up</button>
             <button type="submit">Login</button>
         </div>
     </div>
