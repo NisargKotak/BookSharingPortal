@@ -9,7 +9,8 @@ var flash = require("connect-flash");
 var User = require('./models/User');
 var Transactions = require('./models/Transactions');
 var Books = require('./models/Book');
-var differenceInDays = require('date-fns/differenceInDays')
+var differenceInDays = require('date-fns/differenceInDays');
+var max = require('date-fns/max');
 var count = 1;
 var INITIAL_BALANCE = 100;
 var PENALTY = 5;
@@ -79,9 +80,15 @@ app.get('/home', isLoggedIn, function(req,res){
             if(books.length>0)
             {
                 books.filter(book => book.requestStatus==='Approved').forEach(book => {
-                    let cur = differenceInDays(Date.now(),book.dateOfLending);
-                    if(cur>NO_OF_DAYS && book.borrowerName===req.user.name)
-                        total+=PENALTY*(cur-NO_OF_DAYS);
+                let cur = differenceInDays(Date.now(),book.dateOfLending);
+                if(cur>NO_OF_DAYS && book.borrowerName===req.user.name)
+                {
+                    if(currentUser.lastUpdatedOn < book.dateOfLending+ 7*24*60*60)
+                        total+=PENALTY*cur;
+                    else
+                        total+=PENALTY*differenceInDays(Date.now(),book.dateOfLending+ 7*24*60*60);
+                }
+
                 });
                 User.find({name:req.user.name},function (err ,users) {
                     if(differenceInDays(Date.now(),users[0].lastUpdatedOn)>0)
@@ -158,8 +165,21 @@ app.post("/returnBook",isLoggedIn,function(req,res) {
         if(err) {
             console.log(err);
         } else {
-            book[0].isActive = false;
             book[0].requestStatus = "Returned";
+            book[0].save();
+            res.redirect("/home");
+        }
+    }).sort({dateOfLending:-1});
+});
+
+app.post("/receiveBook",isLoggedIn,function(req,res) {
+    var bookId = Number(req.body.id);
+    Transactions.find({id:bookId},function(err,book) {
+        if(err) {
+            console.log(err);
+        } else {
+            book[0].isActive = false;
+            book[0].requestStatus = "Received";
             book[0].dateOfReturning = Date.now();
             book[0].save();
             Books.find({id : bookId},function(err,returnedBook) {
@@ -217,22 +237,51 @@ app.post("/search", function(req,res) {
         // console.log("here");
         if(req.body.bookName !== "" && req.body.author !== "") {
             // console.log("here1");
-            Books.find({bookName:req.body.bookName, author:req.body.author}, function(err,books) {
+            Books.find({bookName:req.body.bookName, author:req.body.author, isActive:true}, function(err,books) {
                 res.render("search",{books:books});
             });
         } else if(req.body.bookName === "") {
             // console.log("here3");
-            Books.find({author:req.body.author}, function(err,books) {
+            Books.find({author:req.body.author, isActive:true}, function(err,books) {
                 res.render("search",{books:books});
             });
         } else if(req.body.author === "") {
             // console.log("here2");
-            Books.find({bookName:req.body.bookName}, function(err,books) {
+            Books.find({bookName:req.body.bookName, isActive:true}, function(err,books) {
                 res.render("search",{books:books});
             });
         }
     }
-    
+});
+
+app.get("/removeBook",isLoggedIn,function(req,res) {
+    res.render("removeBook",{books:null});
+});
+
+app.post("/removeBook", function(req,res) {
+    if(req.body.bookName === "" && req.body.author === "") {
+        req.flash("error", "Please enter atleast one field");
+        res.locals.error = req.flash("error");
+        res.render("removeBook",{books:null});
+    } else {
+        // console.log("here");
+        if(req.body.bookName !== "" && req.body.author !== "") {
+            // console.log("here1");
+            Books.find({bookName:req.body.bookName, author:req.body.author, isActive:true}, function(err,books) {
+                res.render("removeBook",{books:books});
+            });
+        } else if(req.body.bookName === "") {
+            // console.log("here3");
+            Books.find({author:req.body.author, isActive:true}, function(err,books) {
+                res.render("removeBook",{books:books});
+            });
+        } else if(req.body.author === "") {
+            // console.log("here2");
+            Books.find({bookName:req.body.bookName, isActive:true}, function(err,books) {
+                res.render("removeBook",{books:books});
+            });
+        }
+    }
 });
 
 app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
@@ -257,7 +306,18 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
     res.redirect("/home");
 });
 
-
+app.post("/confirmRemoval/:bookID", isLoggedIn, function(req,res) {
+    Books.find({id: req.params.bookID}, function(err,book) {
+        if(err) {
+            console.log(err);
+        } else {
+            // console.log(book[0].status);
+            book[0].isActive = false;
+            book[0].save();
+        }
+    });
+    res.redirect("/removeBook");
+});
 
 //Authentication Routes
 app.get("/register", function(request, response){
@@ -275,7 +335,7 @@ app.post("/register", function(request, response){
 		} else {
 			passport.authenticate("local")(request, response, function(){
 				request.flash("success", request.body.name + ", you've been registered successfully!");
-                response.locals.error = request.flash("success");
+                response.locals.success = request.flash("success");
                 response.redirect("/home");
 			});
 		}
@@ -296,7 +356,7 @@ app.post("/login", passport.authenticate("local",
 app.get("/logout", function(request, response){
 	request.logout();
 	request.flash("success", "Logged you out!");
-    response.locals.error = request.flash("success");
+    response.locals.success = request.flash("success");
     response.redirect("/");
 });
 

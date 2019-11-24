@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/css/styles2.css">
+<% include partials/header %>
+<button onclick=location.href="/home" class="back">Go Back</button>
+<form method="POST" action="/removeBook">
+    <div class="parent">
+        <div class="kid">
+            <label><b>Book Name</b></label>
+            <input type="text" name="bookName">
+        </div>
+        <div class="kid">
+            <label><b>Author</b></label>
+            <input type="text" name="author">
+        </div>
+        <button type="submit">
+            Search
+        </button>
+    </div>
+</form>
+
+<table rules="rows">
+    <tr>
+        <th>Book Name</th>
+        <th>Book Owner</th>
+        <th>Book Author</th>
+        <th>Book Publisher</th>
+        <th>Book Edition</th>
+        <th>Remove</th>
+    </tr>
+    <% if(books != null) { %>
+        <% books.forEach(function(book) { %>
+            <% if(book.status === "Available" && book.owner === currentUser.name) { %>
+                <tr>
+                    <td><%= book.bookName %></td>
+                    <td><%= book.owner %></td>
+                    <td><%= book.author %></td>
+                    <td><%= book.publisher %></td>
+                    <td><%= book.edition %></td>
+                    <td>
+                        <form action="/confirmRemoval/<%= book.id %>" method="POST">
+                            <a href="#" onclick="if (! confirm('Do you want to remove this book?')) { return false; } else this.parentNode.submit()" >Click Here</a>
+                        </form>
+                    </td>
+                </tr>
+            <% } %>
+        <% }); %>
+    <% } %>
+</table>
+

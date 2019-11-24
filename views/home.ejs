@@ -9,6 +9,7 @@
         <p style="float: left;margin-right: 10px">Deposit Left: <strong><%=currentUser.deposit%></strong></p>
         <button style="margin-right: 10px" onclick=location.href="/addbook">Add Book</button>
         <button style="margin-right: 10px" onclick=location.href="/search">Search Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/removeBook">Remove Book</button>
         <button style="margin-right: 10px" onclick=location.href="/logout">Logout</button>
     </div>
 </div>
@@ -34,34 +35,45 @@
                     <td><%= book.info.publisher %></td>
                     <td><%= book.info.edition %></td>
 
-                        <% if(book.borrowerName === currentUser.name && book.info.status === 'Borrowed') {%>
-                            <td>
-                                <form action="/returnBook" method="POST">
-                                    <input type="hidden" name="id" value=<%= book.id %>>
-                                    <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" > Approved. Click Here to Return</a>
-                                </form>
-                            </td>
-                        <%}%>
-                        <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested') {%>
-                            <td>Requested</td>
-                        <%}%>
-                        <% if(book.lenderName === currentUser.name && book.info.status === 'Borrowed') {%>
-                            <td>Lent</td>
-                        <%}%>
-                        <% if(book.lenderName === currentUser.name && book.info.status === 'Requested') {%>
-                            <td>
-                                <form action="/lendBook" method="POST">
-                                    <input type="hidden" name="id" value=<%= book.id %>>
-                                    <input type="hidden" name="status" value="Available">
-                                    <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny Request</a>
-                                </form>
-                                <form action="/lendBook" method="POST">
-                                    <input type="hidden" name="id" value=<%= book.id %>>
-                                    <input type="hidden" name="status" value="Borrowed">
-                                    <a href="#" onclick="if (! confirm('Do you want to lend?')) { return false; } else this.parentNode.submit()" >Click Here to Lend</a>
-                                </form>
-                            </td>
-                        <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Borrowed' && book.requestStatus !== 'Returned') {%>
+                        <td>
+                            <form action="/returnBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" > Approved. Click Here to Return</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>Requested</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Borrowed'  && book.requestStatus !== 'Returned') {%>
+                        <td>Lent</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Available">
+                                <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny Request</a>
+                            </form>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Borrowed">
+                                <a href="#" onclick="if (! confirm('Do you want to lend?')) { return false; } else this.parentNode.submit()" >Click Here to Lend</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Returned') {%>
+                        <td>Returned</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.requestStatus === 'Returned') {%>
+                        <td>
+                            <form action="/receiveBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <a href="#" onclick="if (! confirm('Did you receive the book?')) { return false; } else this.parentNode.submit()" >Received?</a>
+                            </form>
+                        </td>
+                    <%}%>
                 </tr>
                     <%}%>
                 <% if(book.isActive === false) {%>
@@ -72,14 +84,14 @@
                         <td><%= book.info.author %></td>
                         <td><%= book.info.publisher %></td>
                         <td><%= book.info.edition %></td>
-                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Returned') {%>
-                            <td>Returned</td>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Received') {%>
+                            <td>Returned Successfully</td>
                         <%}%>
                         <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Rejected') {%>
                             <td>Request Rejected</td>
                         <%}%>
-                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Returned') {%>
-                            <td>Returned</td>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Received') {%>
+                            <td>Received Successfully</td>
                         <%}%>
                         <% if(book.lenderName === currentUser.name && book.requestStatus === 'Rejected') {%>
                             <td>Request Denied</td>
