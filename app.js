@@ -10,7 +10,6 @@ var User = require('./models/User');
 var Transactions = require('./models/Transactions');
 var Books = require('./models/Book');
 var differenceInDays = require('date-fns/differenceInDays');
-var max = require('date-fns/max');
 var count = 1;
 var INITIAL_BALANCE = 100;
 var PENALTY = 5;
@@ -83,10 +82,10 @@ app.get('/home', isLoggedIn, function(req,res){
                 let cur = differenceInDays(Date.now(),book.dateOfLending);
                 if(cur>NO_OF_DAYS && book.borrowerName===req.user.name)
                 {
-                    if(currentUser.lastUpdatedOn < book.dateOfLending+ 7*24*60*60)
-                        total+=PENALTY*cur;
+                    if(req.user.lastUpdatedOn < book.dateOfLending+ 7*24*60*60)
+                        total+=PENALTY*(cur-NO_OF_DAYS);
                     else
-                        total+=PENALTY*differenceInDays(Date.now(),book.dateOfLending+ 7*24*60*60);
+                        total+=PENALTY*differenceInDays(Date.now(),req.user.lastUpdatedOn);
                 }
 
                 });
@@ -99,7 +98,7 @@ app.get('/home', isLoggedIn, function(req,res){
                     }
                     if(users[0].deposit<0)
                     {
-                        req.flash("error", "No Deposit");
+                        req.flash("error","Your access has been revoked, Contact Administrator");
                         res.locals.error = req.flash("error");
                         res.render('login');
                     }
@@ -150,13 +149,14 @@ app.post("/addbook", function(request, response){
         if(err){
             console.log(err);
         } else {
+            count++;
             request.flash("success", newBook.bookName + " has been added to your list");
             //request.user.save();
-            response.locals.error = request.flash("error");
+            // response.locals.success = request.flash("success");
+            response.redirect("/home");
         }
     });
-    count++;
-    response.redirect("/home");
+
 });
 
 app.post("/returnBook",isLoggedIn,function(req,res) {
@@ -330,12 +330,10 @@ app.post("/register", function(request, response){
 		if(err){
             console.log(err);
             request.flash("error", "That Username isn't available!");
-            response.locals.error = request.flash("error");
             response.redirect("/register");
 		} else {
 			passport.authenticate("local")(request, response, function(){
 				request.flash("success", request.body.name + ", you've been registered successfully!");
-                response.locals.success = request.flash("success");
                 response.redirect("/home");
 			});
 		}
@@ -356,7 +354,6 @@ app.post("/login", passport.authenticate("local",
 app.get("/logout", function(request, response){
 	request.logout();
 	request.flash("success", "Logged you out!");
-    response.locals.success = request.flash("success");
     response.redirect("/");
 });
 
@@ -366,7 +363,6 @@ function isLoggedIn(request, response, next){
 		next();
 	} else {
 		request.flash("error", "Please Login First!");
-        response.locals.error = request.flash("error");
         response.redirect("/login");
 	}
 }
