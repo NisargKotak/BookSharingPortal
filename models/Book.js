@@ -9,7 +9,6 @@ var BookSchema = new mongoose.Schema({
     publisher : String,
     owner : String,
     status : String,
-    notified : Boolean,
     isActive : Boolean,
 });
 

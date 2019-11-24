@@ -61,7 +61,7 @@ app.get('/', function(req,res){
 app.get('/home', isLoggedIn, function(req,res){
     Transactions.aggregate([
         { $match: { $or: [{ lenderName: req.user.name},{borrowerName: req.user.name}] }},
-        {$match: {isActive:true}},
+        {$sort : {dateOfLending:-1}},
         { $lookup: {
                 "localField" : "id",
                 "from" : "books",
@@ -88,7 +88,6 @@ app.post("/addbook", function(request, response){
         publisher : request.body.publisher,
         owner : request.user.name,
         status : "Available",
-        notified : false,
         isActive : true
     }, function(err, newBook){
         if(err){
@@ -109,19 +108,19 @@ app.post("/returnBook",isLoggedIn,function(req,res) {
             console.log(err);
         } else {
             book[0].isActive = false;
+            book[0].requestStatus = "Returned";
             book[0].save();
             Books.find({id : bookId},function(err,returnedBook) {
                 if(err) {
                     console.log(err);
                 } else {
                     returnedBook[0].status = "Available";
-                    returnedBook[0].notified = true;
                     returnedBook[0].save();
                 }
                 res.redirect("/home");
             });
         }
-    }).sort({dateOFLending:-1});
+    }).sort({dateOfLending:-1});
 });
 
 app.post("/lendBook",isLoggedIn,function(req,res) {
@@ -132,13 +131,20 @@ app.post("/lendBook",isLoggedIn,function(req,res) {
         } else {
             returnedBook[0].status = req.body.status;
             returnedBook[0].save();
-            if(req.body.status === "Available")
-            {
-                Transactions.find({id:bookId},function (err, books) {
+
+            Transactions.find({id:bookId},function (err, books) {
+                if(req.body.status === "Available")
+                {
                     books[0].isActive = false;
-                    books[0].save();
-                }).sort({dateOFLending:-1})
-            }
+                    books[0].requestStatus = "Rejected";
+                }
+                else
+                {
+                    books[0].requestStatus = "Approved";
+                }
+                books[0].save();
+            }).sort({dateOfLending:-1})
+
         }
     });
     res.redirect("/home");
@@ -180,17 +186,17 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
             console.log(err);
         } else {
             Transactions.create({
+                requestStatus:"Requested",
                 bookName : book[0].bookName,
                 lenderName : book[0].owner,
                 borrowerName : req.user.name,
                 isActive : true,
-                dateOFLending: Date.now(),
+                dateOfLending: Date.now(),
                 dateOfReturning : (Date.now() + 7*24*60*60),
                 id : book[0].id
             });
             // console.log(book[0].status);
             book[0].status = "Requested";
-            book[0].notified = true;
             book[0].save();
         }
     });

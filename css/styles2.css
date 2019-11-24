@@ -76,3 +76,11 @@ a:link {
     justify-content: space-between;
     align-items: baseline;
 }
+
+.new{
+    background-color: lightgreen;
+}
+
+.old{
+    background-color: salmon;
+}
