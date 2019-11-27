@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/styles2.css">
 <% include partials/header %>
 <button onclick=location.href="/home" class="back">Go Back</button>
-<form method="POST" action="/search">
+<form method="POST" action="/removeBook">
     <div class="parent">
         <div class="kid">
             <label><b>Book Name</b></label>
@@ -24,11 +24,11 @@
         <th>Book Author</th>
         <th>Book Publisher</th>
         <th>Book Edition</th>
-        <th>Action</th>
+        <th>Remove</th>
     </tr>
     <% if(books != null) { %>
         <% books.forEach(function(book) { %>
-            <% if(book.status === "Available" && book.owner !== currentUser.name) { %>
+            <% if(book.status === "Available" && book.owner === currentUser.name) { %>
                 <tr>
                     <td><%= book.bookName %></td>
                     <td><%= book.owner %></td>
@@ -36,17 +36,12 @@
                     <td><%= book.publisher %></td>
                     <td><%= book.edition %></td>
                     <td>
-                        <form action="/confirmDetails/<%= book.id %>" method="POST">
-                            <a href="#" onclick="if (! confirm('Do you want to borrow?')) { return false; } else this.parentNode.submit()" >Borrow</a>
+                        <form action="/confirmRemoval/<%= book.id %>" method="POST">
+                            <a href="#" onclick="if (! confirm('Do you want to remove this book?')) { return false; } else this.parentNode.submit()" >Click Here</a>
                         </form>
-                        <%if(book.canSell === true) {%>
-                            <form action="/buyBook/<%= book.id %>" method="POST">
-                                <a href="#" onclick="if (! confirm('Do you want to buy?')) { return false; } else this.parentNode.submit()" >Buy at <%= book.costOfBook%></a>
-                            </form>
-                        <%}%>
                     </td>
                 </tr>
-                <% } %>
+            <% } %>
         <% }); %>
     <% } %>
 </table>
