@@ -46,6 +46,9 @@
                     <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested') {%>
                         <td>Requested</td>
                     <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested to Buy') {%>
+                        <td>Requested to Buy</td>
+                    <%}%>
                     <% if(book.lenderName === currentUser.name && book.info.status === 'Borrowed'  && book.requestStatus !== 'Returned') {%>
                         <td>Lent</td>
                     <%}%>
@@ -60,6 +63,20 @@
                                 <input type="hidden" name="id" value=<%= book.id %>>
                                 <input type="hidden" name="status" value="Borrowed">
                                 <a href="#" onclick="if (! confirm('Do you want to lend?')) { return false; } else this.parentNode.submit()" >Click Here to Lend</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Requested to Buy') {%>
+                        <td>
+                            <form action="/sellBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Available">
+                                <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny Request to Buy</a>
+                            </form>
+                            <form action="/sellBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Sold">
+                                <a href="#" onclick="if (! confirm('Do you want to sell?')) { return false; } else this.parentNode.submit()" >Click Here to Sell</a>
                             </form>
                         </td>
                     <%}%>
@@ -95,6 +112,18 @@
                         <%}%>
                         <% if(book.lenderName === currentUser.name && book.requestStatus === 'Rejected') {%>
                             <td>Request Denied</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Sold') {%>
+                            <td>Sold Successfully</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Rejected to Buy') {%>
+                            <td>Request to Buy Denied</td>
+                        <%}%>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Sold') {%>
+                            <td>Bought Successfully</td>
+                        <%}%>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Rejected to Buy') {%>
+                            <td>Request to Buy Rejected</td>
                         <%}%>
                     </tr>
                 <%}%>

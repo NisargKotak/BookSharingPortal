@@ -144,7 +144,9 @@ app.post("/addbook", function(request, response){
         publisher : request.body.publisher,
         owner : request.user.name,
         status : "Available",
-        isActive : true
+        isActive : true,
+        canSell : request.body.canSell === "Yes",
+        costOfBook : request.body.canSell === "Yes" && Number(request.body.costOfBook)
     }, function(err, newBook){
         if(err){
             console.log(err);
@@ -213,6 +215,43 @@ app.post("/lendBook",isLoggedIn,function(req,res) {
                 else
                 {
                     books[0].requestStatus = "Approved";
+                    books[0].dateOfLending = Date.now();
+                    books[0].dateOfReturning = Date.now() + 7*24*60*60;
+                }
+                books[0].save();
+            }).sort({dateOfLending:-1})
+
+        }
+    });
+    res.redirect("/home");
+});
+
+app.post("/sellBook",isLoggedIn,function(req,res) {
+    var bookId = Number(req.body.id);
+    Books.find({id : bookId},function(err,returnedBook) {
+        if(err) {
+            console.log(err);
+        } else {
+            if(req.body.status === "Sold")
+            {
+                returnedBook[0].isActive = false;
+                returnedBook[0].status = "Sold";
+            }
+            else
+            {
+                returnedBook[0].status = "Available";
+            }
+            returnedBook[0].save();
+            Transactions.find({id:bookId},function (err, books) {
+                if(req.body.status === "Available")
+                {
+                    books[0].isActive = false;
+                    books[0].requestStatus = "Rejected to Buy";
+                }
+                else
+                {
+                    books[0].isActive = false;
+                    books[0].requestStatus = "Sold";
                     books[0].dateOfLending = Date.now();
                     books[0].dateOfReturning = Date.now() + 7*24*60*60;
                 }
@@ -300,6 +339,28 @@ app.post("/confirmDetails/:bookID", isLoggedIn, function(req,res) {
             });
             // console.log(book[0].status);
             book[0].status = "Requested";
+            book[0].save();
+        }
+    });
+    res.redirect("/home");
+});
+
+app.post("/buyBook/:bookID", isLoggedIn, function(req,res) {
+    Books.find({id: req.params.bookID}, function(err,book) {
+        if(err) {
+            console.log(err);
+        } else {
+            Transactions.create({
+                requestStatus:"Requested to Buy",
+                bookName : book[0].bookName,
+                lenderName : book[0].owner,
+                borrowerName : req.user.name,
+                isActive : true,
+                dateOfLending: Date.now(),
+                id : book[0].id
+            });
+            // console.log(book[0].status);
+            book[0].status = "Requested to Buy";
             book[0].save();
         }
     });

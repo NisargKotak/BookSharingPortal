@@ -24,7 +24,7 @@
         <th>Book Author</th>
         <th>Book Publisher</th>
         <th>Book Edition</th>
-        <th>Borrow</th>
+        <th>Action</th>
     </tr>
     <% if(books != null) { %>
         <% books.forEach(function(book) { %>
@@ -37,8 +37,13 @@
                     <td><%= book.edition %></td>
                     <td>
                         <form action="/confirmDetails/<%= book.id %>" method="POST">
-                            <a href="#" onclick="if (! confirm('Do you want to borrow?')) { return false; } else this.parentNode.submit()" >Click Here</a>
+                            <a href="#" onclick="if (! confirm('Do you want to borrow?')) { return false; } else this.parentNode.submit()" >Borrow</a>
                         </form>
+                        <%if(book.canSell === true) {%>
+                            <form action="/buyBook/<%= book.id %>" method="POST">
+                                <a href="#" onclick="if (! confirm('Do you want to buy?')) { return false; } else this.parentNode.submit()" >Buy at <%= book.costOfBook%></a>
+                            </form>
+                        <%}%>
                     </td>
                 </tr>
                 <% } %>

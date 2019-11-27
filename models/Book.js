@@ -10,6 +10,8 @@ var BookSchema = new mongoose.Schema({
     owner : String,
     status : String,
     isActive : Boolean,
+    canSell : Boolean,
+    costOfBook : Number
 });
 
 BookSchema.plugin(passportLocalMongoose);
