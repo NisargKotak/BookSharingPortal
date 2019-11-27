@@ -1,8 +1,52 @@
-<form action="/addbook" method="POST">
-    <input type="text" name="bookName" placeholder="Book Name" required>
-    <input type="text" name="author" placeholder="Author" required>
-    <input type="text" name="edition"  placeholder="Edition">
-    <input type="text" name="publisher" placeholder="Publisher">
+<link rel="stylesheet" href="/css/styles3.css">
+<% include partials/header %>
 
-    <button type="submit">Submit!</button>
+<script>
+    function myFunction() {
+        var checkBox = document.getElementById("myCheck");
+        var cost = document.getElementById("cost");
+        if (checkBox.value === "Yes"){
+            cost.style.visibility = "visible";
+        } else {
+            cost.style.visibility = "hidden";
+        }
+    }
+</script>
+
+<form action="/addbook" method="POST">
+    <div class="parent">
+        <h1>Add New Book</h1>
+        <hr>
+        <div class="kid">
+            <label><b>Book Name</b></label>
+            <input type="text" name="bookName" required>
+        </div>
+        <div class="kid">
+            <label><b>Author</b></label>
+            <input type="text" name="author" required>
+        </div>
+        <div class="kid">
+            <label><b>Edition</b></label>
+            <input type="text" name="edition">
+        </div>
+        <div class="kid">
+            <label><b>Publisher</b></label>
+            <input type="text" name="publisher">
+        </div>
+        <div class="kid">
+            <label><b>Do you want to Sell</b></label>
+            <select name="canSell" id="myCheck" onclick="myFunction()">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <div class="kid" id="cost">
+            <label><b>Cost of the Book</b></label>
+            <input type="text" name="costOfBook">
+        </div>
+        <div class="kid">
+            <button onclick=location.href="/home">Cancel</button>
+            <button type="submit">Add!</button>
+        </div>
+    </div>
 </form>

@@ -1,27 +1,132 @@
+<link rel="stylesheet" href="/css/styles2.css">
 <% include partials/header %>
 
+<div class="top">
+    <h1>
+        Welcome <%= currentUser.name %>
+    </h1>
+    <div style="display: flex;align-items: baseline">
+        <p style="float: left;margin-right: 10px">Deposit Left: <strong><%=currentUser.deposit%></strong></p>
+        <button style="margin-right: 10px" onclick=location.href="/addbook">Add Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/search">Search Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/removeBook">Remove Book</button>
+        <button style="margin-right: 10px" onclick=location.href="/logout">Logout</button>
+    </div>
+</div>
 
-<h1>
-    <%= currentUser.name %>, Welcome to your home page!
-</h1>
-<div>
-    <% books.forEach(function(book){ %>
-        <div>
-            <%= book.bookName %>
-            <%= book.lenderName %>
-            <%= book.borrowerName %>
-        </div>
-    <% }) %>       
-</div>
-<div>
-    <a href="/addbook">Add a Book!</a>
-</div>
-<div>
-    <a href="/returnBook">Return a book</a>
-</div>
-<div>
-    <a href="/search">Search a Book!</a>
-</div>
-<div>
-    <a href="/logout">Logout</a>
-</div>
+<table rules="rows">
+    <tr>
+        <th>Book Name</th>
+        <th>Book Owner</th>
+        <th>Book Borrower</th>
+        <th>Book Author</th>
+        <th>Book Publisher</th>
+        <th>Book Edition</th>
+        <th>Action</th>
+    </tr>
+    <% if(books != null) { %>
+    <% books.forEach(function(book) { %>
+            <% if(book.isActive === true) {%>
+                <tr class="new">
+                    <td><%= book.info.bookName %></td>
+                    <td><%= book.info.owner %></td>
+                    <td><%= book.borrowerName %></td>
+                    <td><%= book.info.author %></td>
+                    <td><%= book.info.publisher %></td>
+                    <td><%= book.info.edition %></td>
+
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Borrowed' && book.requestStatus !== 'Returned') {%>
+                        <td>
+                            <form action="/returnBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <a href="#" onclick="if (! confirm('Do you want to return?')) { return false; } else this.parentNode.submit()" > Approved. Click Here to Return</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>Requested</td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.info.status === 'Requested to Buy') {%>
+                        <td>Requested to Buy</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Borrowed'  && book.requestStatus !== 'Returned') {%>
+                        <td>Lent</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Requested') {%>
+                        <td>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Available">
+                                <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny Request</a>
+                            </form>
+                            <form action="/lendBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Borrowed">
+                                <a href="#" onclick="if (! confirm('Do you want to lend?')) { return false; } else this.parentNode.submit()" >Click Here to Lend</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.info.status === 'Requested to Buy') {%>
+                        <td>
+                            <form action="/sellBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Available">
+                                <a href="#" onclick="if (! confirm('Do you want to deny the request?')) { return false; } else this.parentNode.submit()" >Click Here to Deny Request to Buy</a>
+                            </form>
+                            <form action="/sellBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <input type="hidden" name="status" value="Sold">
+                                <a href="#" onclick="if (! confirm('Do you want to sell?')) { return false; } else this.parentNode.submit()" >Click Here to Sell</a>
+                            </form>
+                        </td>
+                    <%}%>
+                    <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Returned') {%>
+                        <td>Returned</td>
+                    <%}%>
+                    <% if(book.lenderName === currentUser.name && book.requestStatus === 'Returned') {%>
+                        <td>
+                            <form action="/receiveBook" method="POST">
+                                <input type="hidden" name="id" value=<%= book.id %>>
+                                <a href="#" onclick="if (! confirm('Did you receive the book?')) { return false; } else this.parentNode.submit()" >Received?</a>
+                            </form>
+                        </td>
+                    <%}%>
+                </tr>
+                    <%}%>
+                <% if(book.isActive === false) {%>
+                    <tr class="old">
+                        <td><%= book.info.bookName %></td>
+                        <td><%= book.info.owner %></td>
+                        <td><%= book.borrowerName %></td>
+                        <td><%= book.info.author %></td>
+                        <td><%= book.info.publisher %></td>
+                        <td><%= book.info.edition %></td>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Received') {%>
+                            <td>Returned Successfully</td>
+                        <%}%>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Rejected') {%>
+                            <td>Request Rejected</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Received') {%>
+                            <td>Received Successfully</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Rejected') {%>
+                            <td>Request Denied</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Sold') {%>
+                            <td>Sold Successfully</td>
+                        <%}%>
+                        <% if(book.lenderName === currentUser.name && book.requestStatus === 'Rejected to Buy') {%>
+                            <td>Request to Buy Denied</td>
+                        <%}%>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Sold') {%>
+                            <td>Bought Successfully</td>
+                        <%}%>
+                        <% if(book.borrowerName === currentUser.name && book.requestStatus === 'Rejected to Buy') {%>
+                            <td>Request to Buy Rejected</td>
+                        <%}%>
+                    </tr>
+                <%}%>
+        <% }); %>
+    <% } %>
+</table>

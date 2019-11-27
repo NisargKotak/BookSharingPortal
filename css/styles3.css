@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: url("/images/book.jpg");
+    background-size: cover;
+}
+
+* {box-sizing: border-box}
+
+.parent {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    margin:200px auto;
+    background-color: white;
+    padding: 10px 100px 50px;
+    border-radius: 25px;
+}
+.kid {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 25px;
+    align-items: baseline;
+}
+
+h1{
+    align-self: center;
+}
+
+hr {
+    border: 1px solid black;
+    margin-bottom: 25px;
+    width: 600px;
+    align-content: center;
+}
+
+input[type=text], input[type=password], select, option {
+    width: 400px;
+    padding: 15px;
+    display: inline-block;
+    border: 1px solid #ddd;
+    background: white;
+    color: black;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: white;
+    outline: none;
+}
+
+button {
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    padding: 15px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button:hover {
+    opacity:1;
+}
