@@ -14,5 +14,7 @@ var BookSchema = new mongoose.Schema({
     costOfBook : Number
 });
 
+BookSchema.index({bookName : 1});
+
 BookSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model('Book',BookSchema);
